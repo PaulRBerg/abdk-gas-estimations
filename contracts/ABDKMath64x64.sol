@@ -312,12 +312,13 @@ library ABDKMath64x64 {
      * @param x signed 64.64-bit fixed point number
      * @return signed 64.64-bit fixed point number
      */
-    function inv(int128 x) internal pure returns (int128) {
+    function inv(int128 x) internal view returns (int128, uint256) {
+        uint256 startGas = gasleft();
         unchecked {
             require(x != 0);
             int256 result = int256(0x100000000000000000000000000000000) / x;
             require(result >= MIN_64x64 && result <= MAX_64x64);
-            return int128(result);
+            return (int128(result), startGas - gasleft());
         }
     }
 
@@ -341,12 +342,13 @@ library ABDKMath64x64 {
      * @param y signed 64.64-bit fixed point number
      * @return signed 64.64-bit fixed point number
      */
-    function gavg(int128 x, int128 y) internal pure returns (int128) {
+    function gavg(int128 x, int128 y) internal view returns (int128, uint256) {
+        uint256 startGas = gasleft();
         unchecked {
             int256 m = int256(x) * int256(y);
             require(m >= 0);
             require(m < 0x4000000000000000000000000000000000000000000000000000000000000000);
-            return int128(sqrtu(uint256(m)));
+            return (int128(sqrtu(uint256(m))), startGas - gasleft());
         }
     }
 

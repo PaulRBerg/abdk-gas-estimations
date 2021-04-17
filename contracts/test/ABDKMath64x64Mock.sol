@@ -35,12 +35,16 @@ contract ABDKMath64x64Mock {
         console.log("gasUsed", gasUsed);
     }
 
-    function doGavg(int128 x, int128 y) external pure returns (int128 result) {
-        result = ABDKMath64x64.gavg(x, y);
+    function doGavg(int128 x, int128 y) external view returns (int128 result) {
+        uint256 gasUsed;
+        (result, gasUsed) = ABDKMath64x64.gavg(x, y);
+        console.log("gasUsed", gasUsed);
     }
 
-    function doInv(int128 x) external pure returns (int128 result) {
-        result = ABDKMath64x64.inv(x);
+    function doInv(int128 x) external view returns (int128 result) {
+        uint256 gasUsed;
+        (result, gasUsed) = ABDKMath64x64.inv(x);
+        console.log("gasUsed", gasUsed);
     }
 
     function doLn(int128 x) external pure returns (int128 result) {
