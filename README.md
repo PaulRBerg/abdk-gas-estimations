@@ -1,3 +1,3 @@
-# Gas Estimations
+# ABDK Gas Estimations
 
-Gas estimations for third-party contracts and libraries.
+Gas estimations for ADBKMath64x64.

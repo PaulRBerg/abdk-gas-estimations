@@ -9,23 +9,30 @@ contract ABDKMath64x64Mock {
         uint256 gasUsed;
         (result, gasUsed) = ABDKMath64x64.abs(x);
         console.log("gasUsed", gasUsed);
-        console.log("-----------------");
     }
 
-    function doAvg(int128 x, int128 y) external pure returns (int128 result) {
-        result = ABDKMath64x64.avg(x, y);
+    function doAvg(int128 x, int128 y) external view returns (int128 result) {
+        uint256 gasUsed;
+        (result, gasUsed) = ABDKMath64x64.avg(x, y);
+        console.log("gasUsed", gasUsed);
     }
 
-    function doDiv(int128 x, int128 y) external pure returns (int128 result) {
-        result = ABDKMath64x64.div(x, y);
+    function doDiv(int128 x, int128 y) external view returns (int128 result) {
+        uint256 gasUsed;
+        (result, gasUsed) = ABDKMath64x64.div(x, y);
+        console.log("gasUsed", gasUsed);
     }
 
-    function doExp(int128 x) external pure returns (int128 result) {
-        result = ABDKMath64x64.exp(x);
+    function doExp(int128 x) external view returns (int128 result) {
+        uint256 gasUsed;
+        (result, gasUsed) = ABDKMath64x64.exp(x);
+        console.log("gasUsed", gasUsed);
     }
 
-    function doExp2(int128 x) external pure returns (int128 result) {
-        result = ABDKMath64x64.exp_2(x);
+    function doExp2(int128 x) external view returns (int128 result) {
+        uint256 gasUsed;
+        (result, gasUsed) = ABDKMath64x64.exp_2(x);
+        console.log("gasUsed", gasUsed);
     }
 
     function doGavg(int128 x, int128 y) external pure returns (int128 result) {

@@ -1,6 +1,6 @@
 {
-  "name": "@paulrberg/gas-estimations",
-  "description": "Gas estimations for third-party contracts and libraries",
+  "name": "@paulrberg/abdk-gas-estimations",
+  "description": "Gas estimations for ADBKMath64x64",
   "version": "1.0.0",
   "author": {
     "name": "Paul Razvan Berg",

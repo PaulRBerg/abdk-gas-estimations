@@ -219,12 +219,13 @@ library ABDKMath64x64 {
      * @param y signed 64.64-bit fixed point number
      * @return signed 64.64-bit fixed point number
      */
-    function div(int128 x, int128 y) internal pure returns (int128) {
+    function div(int128 x, int128 y) internal view returns (int128, uint256) {
+        uint256 startGas = gasleft();
         unchecked {
             require(y != 0);
             int256 result = (int256(x) << 64) / y;
             require(result >= MIN_64x64 && result <= MAX_64x64);
-            return int128(result);
+            return (int128(result), startGas - gasleft());
         }
     }
 
@@ -327,8 +328,9 @@ library ABDKMath64x64 {
      * @param y signed 64.64-bit fixed point number
      * @return signed 64.64-bit fixed point number
      */
-    function avg(int128 x, int128 y) internal pure returns (int128) {
-        unchecked { return int128((int256(x) + int256(y)) >> 1); }
+    function avg(int128 x, int128 y) internal view returns (int128, uint256) {
+        uint256 startGas = gasleft();
+        unchecked { return (int128((int256(x) + int256(y)) >> 1), startGas - gasleft()); }
     }
 
     /**
@@ -533,11 +535,12 @@ library ABDKMath64x64 {
      * @param x signed 64.64-bit fixed point number
      * @return signed 64.64-bit fixed point number
      */
-    function exp_2(int128 x) internal pure returns (int128) {
+    function exp_2(int128 x) internal view returns (int128, uint256) {
+        uint256 startGas = gasleft();
         unchecked {
             require(x < 0x400000000000000000); // Overflow
 
-            if (x < -0x400000000000000000) return 0; // Underflow
+            if (x < -0x400000000000000000) return (0, startGas - gasleft()); // Underflow
 
             uint256 result = 0x80000000000000000000000000000000;
 
@@ -609,7 +612,7 @@ library ABDKMath64x64 {
             result >>= uint256(int256(63 - (x >> 64)));
             require(result <= uint256(int256(MAX_64x64)));
 
-            return int128(int256(result));
+            return (int128(int256(result)), startGas - gasleft());
         }
     }
 
@@ -619,13 +622,16 @@ library ABDKMath64x64 {
      * @param x signed 64.64-bit fixed point number
      * @return signed 64.64-bit fixed point number
      */
-    function exp(int128 x) internal pure returns (int128) {
+    function exp(int128 x) internal view returns (int128, uint256) {
+        uint256 startGas = gasleft();
         unchecked {
             require(x < 0x400000000000000000); // Overflow
 
-            if (x < -0x400000000000000000) return 0; // Underflow
+            if (x < -0x400000000000000000) return (0, startGas - gasleft()); // Underflow
 
-            return exp_2(int128((int256(x) * 0x171547652B82FE1777D0FFDA0D23A7D12) >> 128));
+            int128 result;
+            (result, ) = exp_2(int128((int256(x) * 0x171547652B82FE1777D0FFDA0D23A7D12) >> 128));
+            return (result, startGas - gasleft());
         }
     }
 
