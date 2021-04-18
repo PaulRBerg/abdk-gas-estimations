@@ -523,11 +523,15 @@ library ABDKMath64x64 {
      * @param x signed 64.64-bit fixed point number
      * @return signed 64.64-bit fixed point number
      */
-    function ln(int128 x) internal pure returns (int128) {
+    function ln(int128 x) internal view returns (int128, uint256) {
+        uint256 startGas = gasleft();
         unchecked {
             require(x > 0);
 
-            return int128(int256((uint256(int256(log_2(x))) * 0xB17217F7D1CF79ABC9E3B39803F2F6AF) >> 128));
+            return (
+                int128(int256((uint256(int256(log_2(x))) * 0xB17217F7D1CF79ABC9E3B39803F2F6AF) >> 128)),
+                startGas - gasleft()
+            );
         }
     }
 

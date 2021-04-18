@@ -6,7 +6,7 @@ import { E, MAX_64x64, MIN_64x64, PI, ZERO } from "../helpers/constants";
 import { bn } from "../helpers/numbers";
 
 export function shouldBehaveLikeABDKMath64x64(): void {
-  context("abs", async function () {
+  context("abs", function () {
     const testSets = [
       [MIN_64x64.add(1), MAX_64x64],
       [bn("-0x10000000000000000"), bn("0x10000000000000000")],
@@ -22,7 +22,7 @@ export function shouldBehaveLikeABDKMath64x64(): void {
     });
   });
 
-  context("avg", async function () {
+  context("avg", function () {
     const testSets = [
       [MIN_64x64, MIN_64x64, MIN_64x64],
       [bn("-0x40000000000000000"), bn("0x20000000000000000"), bn("-0x10000000000000000")],
@@ -42,7 +42,7 @@ export function shouldBehaveLikeABDKMath64x64(): void {
     });
   });
 
-  context("div", async function () {
+  context("div", function () {
     const testSets = [
       [MIN_64x64, bn("0x20000000000000000"), MIN_64x64.div(2)],
       [bn("-0x40000000000000000"), bn("-0x20000000000000000"), bn("0x20000000000000000")],
@@ -56,7 +56,7 @@ export function shouldBehaveLikeABDKMath64x64(): void {
     });
   });
 
-  context("exp", async function () {
+  context("exp", function () {
     const testSets = [
       [bn("-0x400000000000000001"), ZERO],
       [bn("-0x400000000000000000"), ZERO],
@@ -81,7 +81,7 @@ export function shouldBehaveLikeABDKMath64x64(): void {
     });
   });
 
-  context("exp2", async function () {
+  context("exp2", function () {
     const testSets = [
       [bn("-0x400000000000000001"), ZERO],
       [bn("-0x400000000000000000"), 1],
@@ -107,7 +107,7 @@ export function shouldBehaveLikeABDKMath64x64(): void {
     });
   });
 
-  context("gavg", async function () {
+  context("gavg", function () {
     const testSets = [
       [MIN_64x64.add(1), bn(-1), bn("0xb504f333f9de6484")],
       [bn("-0x964cccccccccccccccd"), bn("-0x1edb35edf1e0828c36db"), bn("0x1106714d801cbcda4b2c")],
@@ -136,7 +136,7 @@ export function shouldBehaveLikeABDKMath64x64(): void {
     });
   });
 
-  context("inv", async function () {
+  context("inv", function () {
     const testSets = [
       [PI.mul(-1), bn("-0x517cc1b727220a95")],
       [E.mul(-1), bn("-0x5e2d58d8b3bcdf1b")],
@@ -153,6 +153,34 @@ export function shouldBehaveLikeABDKMath64x64(): void {
 
     forEach(testSets).it("takes %e and returns %e", async function (x: BigNumber, expected: BigNumber) {
       const result: BigNumber = await this.abdkMath64x64.doInv(x);
+      expect(expected).to.equal(result);
+    });
+  });
+
+  context("ln", function () {
+    const testSets = [
+      [bn("0x199999999999999a"), bn("-0x24d763776aaa2b059")],
+      [bn("0x3333333333333333"), bn("-0x19c041f7ed8d336b2")],
+      [bn("0x4ccccccccccccccd"), bn("-0x134378fcbda7206e5")],
+      [bn("0x6666666666666666"), bn("-0xea9207870703bd06")],
+      [bn("0x8000000000000000"), bn("-0xb17217f7d1cf79ac")],
+      [bn("0x999999999999999a"), bn("-0x82c577d408a28d39")],
+      [bn("0xb333333333333333"), bn("-0x5b4f0c9384fd3b16")],
+      [bn("0xcccccccccccccccd"), bn("-0x391fef8f35344359")],
+      [bn("0xe666666666666666"), bn("-0x1af8e8210a415d70")],
+      [bn("0x10000000000000000"), ZERO],
+      [bn("0x12000000000000000"), bn("2172713514977912297")],
+      [bn("0x20000000000000000"), bn("0xb17217f7d1cf79ab")],
+      [E, bn("0xffffffffffffffff")],
+      [PI, bn("0x1250d048e7a1bd0bc")],
+      [bn("0x40000000000000000"), bn("0x162e42fefa39ef357")],
+      [bn("0x80000000000000000"), bn("38358925935607966979")],
+      [bn("0xde0b6b3a76400000000000000000000"), bn("764553562531197642353")],
+      [MAX_64x64, bn("0x2bab13e5fca20ef145")],
+    ];
+
+    forEach(testSets).it("takes %e and returns %e", async function (x: BigNumber, expected: BigNumber) {
+      const result: BigNumber = await this.abdkMath64x64.doLn(x);
       expect(expected).to.equal(result);
     });
   });

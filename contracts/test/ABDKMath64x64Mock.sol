@@ -47,8 +47,10 @@ contract ABDKMath64x64Mock {
         console.log("gasUsed", gasUsed);
     }
 
-    function doLn(int128 x) external pure returns (int128 result) {
-        result = ABDKMath64x64.ln(x);
+    function doLn(int128 x) external view returns (int128 result) {
+        uint256 gasUsed;
+        (result, gasUsed) = ABDKMath64x64.ln(x);
+        console.log("gasUsed", gasUsed);
     }
 
     function doLog2(int128 x) external pure returns (int128 result) {
