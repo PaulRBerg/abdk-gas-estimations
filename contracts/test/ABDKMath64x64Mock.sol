@@ -53,19 +53,27 @@ contract ABDKMath64x64Mock {
         console.log("gasUsed", gasUsed);
     }
 
-    function doLog2(int128 x) external pure returns (int128 result) {
-        result = ABDKMath64x64.log_2(x);
+    function doLog2(int128 x) external view returns (int128 result) {
+        uint256 gasUsed;
+        (result, gasUsed) = ABDKMath64x64.log_2(x);
+        console.log("gasUsed", gasUsed);
     }
 
-    function doMul(int128 x, int128 y) external pure returns (int128 result) {
-        result = ABDKMath64x64.mul(x, y);
+    function doMul(int128 x, int128 y) external view returns (int128 result) {
+        uint256 gasUsed;
+        (result, gasUsed) = ABDKMath64x64.mul(x, y);
+        console.log("gasUsed", gasUsed);
     }
 
-    function doPow(int128 x, uint256 y) external pure returns (int128 result) {
-        result = ABDKMath64x64.pow(x, y);
+    function doPow(int128 x, uint256 y) external view returns (int128 result) {
+        uint256 gasUsed;
+        (result, gasUsed) = ABDKMath64x64.pow(x, y);
+        console.log("gasUsed", gasUsed);
     }
 
-    function doSqrt(int128 x) external pure returns (int128 result) {
-        result = ABDKMath64x64.sqrt(x);
+    function doSqrt(int128 x) external view returns (int128 result) {
+        uint256 gasUsed;
+        (result, gasUsed) = ABDKMath64x64.sqrt(x);
+        console.log("gasUsed", gasUsed);
     }
 }

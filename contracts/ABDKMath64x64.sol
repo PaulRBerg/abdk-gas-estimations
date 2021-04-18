@@ -140,11 +140,12 @@ library ABDKMath64x64 {
      * @param y signed 64.64-bit fixed point number
      * @return signed 64.64-bit fixed point number
      */
-    function mul(int128 x, int128 y) internal pure returns (int128) {
+    function mul(int128 x, int128 y) internal view returns (int128, uint256) {
+        uint256 startGas = gasleft();
         unchecked {
             int256 result = (int256(x) * y) >> 64;
             require(result >= MIN_64x64 && result <= MAX_64x64);
-            return int128(result);
+            return (int128(result), startGas - gasleft());
         }
     }
 
@@ -360,7 +361,8 @@ library ABDKMath64x64 {
      * @param y uint256 value
      * @return signed 64.64-bit fixed point number
      */
-    function pow(int128 x, uint256 y) internal pure returns (int128) {
+    function pow(int128 x, uint256 y) internal view returns (int128, uint256) {
+        uint256 startGas = gasleft();
         unchecked {
             bool negative = x < 0 && y & 1 == 1;
 
@@ -449,7 +451,7 @@ library ABDKMath64x64 {
             }
             int256 result = negative ? -int256(absResult) : int256(absResult);
             require(result >= MIN_64x64 && result <= MAX_64x64);
-            return int128(result);
+            return (int128(result), startGas - gasleft());
         }
     }
 
@@ -459,10 +461,11 @@ library ABDKMath64x64 {
      * @param x signed 64.64-bit fixed point number
      * @return signed 64.64-bit fixed point number
      */
-    function sqrt(int128 x) internal pure returns (int128) {
+    function sqrt(int128 x) internal view returns (int128, uint256) {
+        uint256 startGas = gasleft();
         unchecked {
             require(x >= 0);
-            return int128(sqrtu(uint256(int256(x)) << 64));
+            return (int128(sqrtu(uint256(int256(x)) << 64)), startGas - gasleft());
         }
     }
 
@@ -472,7 +475,8 @@ library ABDKMath64x64 {
      * @param x signed 64.64-bit fixed point number
      * @return signed 64.64-bit fixed point number
      */
-    function log_2(int128 x) internal pure returns (int128) {
+    function log_2(int128 x) internal view returns (int128, uint256) {
+        uint256 startGas = gasleft();
         unchecked {
             require(x > 0);
 
@@ -513,7 +517,7 @@ library ABDKMath64x64 {
                 result += bit * int256(b);
             }
 
-            return int128(result);
+            return (int128(result), startGas - gasleft());
         }
     }
 
@@ -528,8 +532,10 @@ library ABDKMath64x64 {
         unchecked {
             require(x > 0);
 
+            int128 result;
+            (result, ) = log_2(x);
             return (
-                int128(int256((uint256(int256(log_2(x))) * 0xB17217F7D1CF79ABC9E3B39803F2F6AF) >> 128)),
+                int128(int256((uint256(int256(result)) * 0xB17217F7D1CF79ABC9E3B39803F2F6AF) >> 128)),
                 startGas - gasleft()
             );
         }

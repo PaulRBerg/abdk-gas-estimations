@@ -175,12 +175,127 @@ export function shouldBehaveLikeABDKMath64x64(): void {
       [PI, bn("0x1250d048e7a1bd0bc")],
       [bn("0x40000000000000000"), bn("0x162e42fefa39ef357")],
       [bn("0x80000000000000000"), bn("38358925935607966979")],
-      [bn("0xde0b6b3a76400000000000000000000"), bn("764553562531197642353")],
+      [bn("0xde0b6b3a76400000000000000000000"), bn("0x29724fe657ff706671")],
       [MAX_64x64, bn("0x2bab13e5fca20ef145")],
     ];
 
     forEach(testSets).it("takes %e and returns %e", async function (x: BigNumber, expected: BigNumber) {
       const result: BigNumber = await this.abdkMath64x64.doLn(x);
+      expect(expected).to.equal(result);
+    });
+  });
+
+  context("log2", function () {
+    const testSets = [
+      [bn("0x199999999999999a"), bn("-0x035269e12f346e2bf4")],
+      [bn("0x3333333333333333"), bn("-0x025269e12f346e2bfb")],
+      [bn("0x4ccccccccccccccd"), bn("-0x01bca9c6f53897a459")],
+      [bn("0x6666666666666666"), bn("-0x015269e12f346e2bfb")],
+      [bn("0x8000000000000000"), bn("-0x010000000000000000")],
+      [bn("0x999999999999999a"), bn("-0xbca9c6f53897a459")],
+      [bn("0xb333333333333333"), bn("-0x83bb1144b3e890c7")],
+      [bn("0xcccccccccccccccd"), bn("-0x5269e12f346e2bf9")],
+      [bn("0xe666666666666666"), bn("-0x26e9acbb3cc11cbb")],
+      [bn("0x10000000000000000"), ZERO],
+      [bn("0x12000000000000000"), bn("0x2b803473f7ad0f3f")],
+      [bn("0x20000000000000000"), bn("0x10000000000000000")],
+      [E, bn("0x0171547652b82fe177")],
+      [PI, bn("0x01a6c873498ddf75b0")],
+      [bn("0x40000000000000000"), bn("0x20000000000000000")],
+      [bn("0x80000000000000000"), bn("0x30000000000000000")],
+      [bn("0xde0b6b3a76400000000000000000000"), bn("0x3bcb71d551afbf1784")],
+      [MAX_64x64, bn("0x3effffffffffffffff")],
+    ];
+
+    forEach(testSets).it("takes %e and returns %e", async function (x: BigNumber, expected: BigNumber) {
+      const result: BigNumber = await this.abdkMath64x64.doLog2(x);
+      expect(expected).to.equal(result);
+    });
+  });
+
+  context("mul", function () {
+    const testSets = [
+      [MIN_64x64, bn("0x12"), bn("-0x090000000000000000")],
+      [bn("-0xf42400000000000000000"), bn("0x10000000000000000"), bn("-0x0f42400000000000000000")],
+      [bn("-0x32b7fd2f1a9fbe76c8b4"), bn("0x30efd70a3d70a3d70a4"), bn("-0x9b203d8c0f66a55087087f")],
+      [bn("-0x26590000000000000000"), bn("0x92c0000000000000000"), bn("-0x015fb84c0000000000000000")],
+      [bn("-0x13a45604189374bc6a8"), bn("0xbc30a3d70a3d70a3d7"), bn("-0xe706a8d4562e09fe8683")],
+      [bn("-0x124ccccccccccccccd"), bn("0xc0a3d70a3d70a3d71"), bn("-0xdc54fdf3b645a1caca")],
+      [PI.mul(-1), E, bn("-0x088a2c05a2ea3a4f32")],
+      [bn("-0x21916872b020c49ba"), bn("0x11e76c8b439581062"), bn("-0x02590060780fdc1615")],
+      [bn("-0x28f5c28f5c28f5c"), bn("0xccccccccccccccd"), bn("-0x20c49ba5e353f8")],
+      [bn("-0x4189374bc6a7f0"), bn("0x28f5c28f5c28f5c"), bn("-0xa7c5ac471b48")],
+      [bn("-0xa7c5ac471b48"), bn("0xa7c5ac471b48"), bn("-0x6df37f68")],
+      [bn("-0x10000000000000000"), bn("0x10000000000000000"), bn("-0x10000000000000000")],
+      [bn("-0x1"), ZERO, ZERO],
+      [bn("-0x1"), bn("0x1"), bn("-0x1")],
+    ].concat([
+      [bn("0x1"), bn("0x1"), ZERO],
+      [bn("0x1"), ZERO, ZERO],
+      [bn("0x10000000000000000"), bn("0x10000000000000000"), bn("0x10000000000000000")],
+      [bn("0xa7c5ac471b48"), bn("0xa7c5ac471b48"), bn("0x6df37f67")],
+      [bn("0x4189374bc6a7f0"), bn("0x28f5c28f5c28f5c"), bn("0xa7c5ac471b47")],
+      [bn("0x28f5c28f5c28f5c"), bn("0xccccccccccccccd"), bn("0x20c49ba5e353f7")],
+      [bn("0x21916872b020c49ba"), bn("0x11e76c8b439581062"), bn("0x02590060780fdc1614")],
+      [PI, E, bn("0x088a2c05a2ea3a4f31")],
+      [bn("0x124ccccccccccccccd"), bn("0xc0a3d70a3d70a3d71"), bn("0xdc54fdf3b645a1cac9")],
+      [bn("0x13a45604189374bc6a8"), bn("0xbc30a3d70a3d70a3d7"), bn("0xe706a8d4562e09fe8682")],
+      [bn("0x26590000000000000000"), bn("0x92c0000000000000000"), bn("0x015fb84c0000000000000000")],
+      [bn("0x32b7fd2f1a9fbe76c8b4"), bn("0x30efd70a3d70a3d70a4"), bn("0x9b203d8c0f66a55087087e")],
+      [bn("0xf42400000000000000000"), bn("0x10000000000000000"), bn("0x0f42400000000000000000")],
+      [MAX_64x64, bn("0x12"), bn("0x08ffffffffffffffff")],
+    ]);
+
+    forEach(testSets).it("takes %e and returns %e", async function (x: BigNumber, y: BigNumber, expected: BigNumber) {
+      const result: BigNumber = await this.abdkMath64x64.doMul(x, y);
+      expect(expected).to.equal(result);
+    });
+  });
+
+  context("pow", function () {
+    const testSets = [
+      [ZERO, ZERO, bn("0x10000000000000000")],
+      [ZERO, bn("0x10000000000000000"), ZERO],
+      [ZERO, E, ZERO],
+      [ZERO, PI, ZERO],
+      [bn("0x4189374bc6a7f0"), bn(3), bn("0x044b82fa09")],
+      [bn("0x199999999999999a"), bn(2), bn("0x28f5c28f5c28f5c")],
+      [bn("0x10000000000000000"), bn(1), bn("0x10000000000000000")],
+      [bn("0x20000000000000000"), bn(5), bn("0x200000000000000000")],
+      [bn("0x20000000000000000"), bn(62), bn("0x40000000000000000000000000000000")],
+      [E, bn(2), bn("0x0763992e35376b730e")],
+      [bn("0x640000000000000000"), bn(4), bn("0x05f5e1000000000000000000")],
+      [PI, bn(3), bn("0x1f019b59389d7c1dff")],
+      [bn("0x57db22d0e56041893"), bn(19), bn("0x66d7fb57e4c479dd52cc8d80b156")],
+      [bn("0x19342a7ef9db22d0e560"), bn(4), bn("0x06283d66b906be3c806ab9413ac745")],
+      [bn("0xf42400000000000000000"), bn(2), bn("0xe8d4a510000000000000000000")],
+      [MAX_64x64, bn(1), MAX_64x64],
+    ];
+
+    forEach(testSets).it("takes %e and returns %e", async function (x: BigNumber, y: BigNumber, expected: BigNumber) {
+      const result: BigNumber = await this.abdkMath64x64.doPow(x, y);
+      expect(expected).to.equal(result);
+    });
+  });
+
+  context("sqrt", function () {
+    const testSets = [
+      [ZERO, ZERO],
+      [bn("0x12"), bn("0x43e1db337")],
+      [bn("0x480f"), bn("0x87d1da0d7f")],
+      [bn("0x10000000000000000"), bn("0x10000000000000000")],
+      [bn("0x20000000000000000"), bn("0x016a09e667f3bcc908")],
+      [E, bn("0x01a61298e1e069bc97")],
+      [bn("0x30000000000000000"), bn("0x01bb67ae8584caa73b")],
+      [PI, bn("0x01c5bf891b4ef6aa79")],
+      [bn("0x40000000000000000"), bn("0x20000000000000000")],
+      [bn("0x100000000000000000"), bn("0x40000000000000000")],
+      [bn("0x16345785d8a00000000000000000000"), bn("0x12d940b6044f7da46cfe7000")],
+      [bn("0xde0b6b3a76400000000000000000000"), bn("0x3b9aca000000000000000000")],
+    ];
+
+    forEach(testSets).it("takes %e and returns %e", async function (x: BigNumber, expected: BigNumber) {
+      const result: BigNumber = await this.abdkMath64x64.doSqrt(x);
       expect(expected).to.equal(result);
     });
   });
